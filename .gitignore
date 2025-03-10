@@ -1,0 +1,10 @@
+
+smallest-esp32-c3-board-pinout.jpg
+wifi.json
+wifi2.json
+*.psw
+*__old*
+ui/assets/*
+
+_upload.cmd
+_download.cmd
