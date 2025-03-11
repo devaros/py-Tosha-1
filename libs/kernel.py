@@ -80,7 +80,7 @@ class Service:
             #tt = time.time_ns()/100000
             await asyncio.sleep(self.AW_LEN) #self.AW_LEN
             #load[0] =  min(1, (load[0] *8 + (time.time_ns()/1000_000 -tt)/1000  ) /9)
-            load[0] =  min(0.9999, (load[0] *6 + ((time.time_ns() -tt)/1000_000_000 - self.AW_LEN )/(1)  ) /7)
+            load[0] =  min(0.9999, (load[0] *7 + ((time.time_ns() -tt)/1000_000_000 - self.AW_LEN )/1  ) /8)
             #load[0] =  min(1, (load[0] *6 + (time.time_ns()/1000_000_000 -tt +1)/(2)  ) /7)
 
     @property
