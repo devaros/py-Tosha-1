@@ -125,9 +125,14 @@ class Files(Service):
 
         #await send_file(request, self.web.app.STATIC_DIR+ '/footer.html')
 
-    @authenticate(CREDENTIALS)
+    #@authenticate(CREDENTIALS)
     async def upload(self, request):
         print("Handling request for upload")
+
+        if request.method == "OPTIONS":
+            await self.web.api_send_response(request)
+            return
+
         if request.method != "PUT":
             print("Method not allowed")
             raise HttpError(request, 501, "Not Implemented")
@@ -169,5 +174,6 @@ class Files(Service):
             print(f"Error renaming file: {tmp_file}")
             raise HttpError(request, 500, "Internal error")
 
-        await self.web.api_send_response(request, 201, "Created")
+        #await self.web.api_send_response(request, 201, "Created")
+        return ' ' 
 

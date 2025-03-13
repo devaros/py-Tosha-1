@@ -33,7 +33,7 @@ class init( ):
         net = NetworkManager(name='NET_MANAGER', timezone_offset=7)
         os_kernel.add_task(net)
 
-        sw = SwitchesBoard()
+        sw = SwitchesBoard(name="Switches Board")
         os_kernel.add_task(sw)
 
         # Инициализация веб-интерфейса

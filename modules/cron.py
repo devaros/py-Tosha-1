@@ -47,19 +47,23 @@ class CronScheduler(Service):
     cmd_list = []
 
     def __init__(self, **kwargs):
-      super().__init__()
+      super().__init__(**kwargs)
       self.old_mm = None
       self.task_list = []
       self.reload()
           
     def reload(self):
       self.task_list = []
-      with open('/crontab.json', 'r') as f:
+      try:
+        with open('/crontab.json', 'r') as f:
           dd = json.loads(f.read())
           #self.state['data'] = dd
           for t in dd:
             self.task_list.append(SchedTask(*t))
-      self.relink_task()
+        self.relink_task()
+      except OSError as e:
+        print('Ошибка открытия файла', '/crontab.json')
+        #raise e
 
     def check_data(self):
       dd = self.state['data']

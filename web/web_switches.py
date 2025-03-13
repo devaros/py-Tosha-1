@@ -36,13 +36,13 @@ class WebSwitches():
           grp_name = grp_name[5]
         else: grp_name = None
         
-        aa_ = next(x for x in os_kernel.tasks  if x.name == 'SwitchesBoard')
+        #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
+        aa_ = os_kernel.find_task('Switches Board')
 
         data = await read_json(request)
         #print("Request data: ",  grp_name, data[0])
         #await 
         aa_.set_value( data[0]['id'], data[0]['value'])
-        #aa_ = next(x for x in os_kernel.tasks  if x.name == 'SwitchesBoard')
         #print(f"api_switch_ls: {aa_}")
         #return json.dumps(aa_.state)
         return ' '
@@ -62,7 +62,9 @@ class WebSwitches():
         await request.write("Connection: keep-alive\r\n\r\n")
         err = [False]
         send_ = [False]
-        aa_ = next(x for x in os_kernel.tasks  if x.name == 'SwitchesBoard')
+        #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
+        aa_ = os_kernel.find_task('Switches Board')
+
         async def scrib():
           try:
             while send_[0]:
@@ -84,7 +86,6 @@ class WebSwitches():
         try:
           await scrib()
           for i in range(11):
-            #aa_ = next(x for x in os_kernel.tasks  if x.name == 'SwitchesBoard')
             if err[0]:
               break
             #print(f"api_switch_ls: {i} \n:: {aa_.state}")

@@ -30,7 +30,6 @@ class NetConfig():
             return
 
         if request.method in ["POST","PUT"]:
-            #aa_ = next(x for x in os_kernel.tasks  if x.name == 'NetworkManager')
             data = await read_json(request)
             print("Request data:",   data)
             await self.net_manager.connect_to_network(data['ssid'], data['pswd'])
@@ -39,46 +38,6 @@ class NetConfig():
             self.net_manager.forget()
             #return json.dumps(aa_.state)
             return ' '
-
-
-
-    #@authenticate(CREDENTIALS)
-    async def api_net_config2__old2(self, request):
-        await request.write("HTTP/1.1 200 OK\r\n")
-        await request.write("access-control-allow-origin: *\r\n") #,immutable
-        #await request.write("Content-Type: text/event-stream\r\n")
-        await request.write("Content-Type: text/event-stream\r\n")
-        await request.write("Cache-Control: no-cache\r\n")
-        await request.write("Connection: keep-alive\r\n\r\n")
-        err = [False]
-
-        aa_ = next(x for x in os_kernel.tasks  if x.name == 'SwitchesBoard')
-        async def scrib():
-          try:
-            await request.write("event: " + "message\r\n")
-            await request.write("data: " + json.dumps(aa_.state) + "\r\n")
-            await request.write(f"id: {aa_.state["time"]}\r\n")
-            await request.write("\r\n")
-          except Exception as e:
-            err[0] = True
-
-        aa_.subscribe( scrib )
-        try:
-          await scrib()
-          for i in range(11):
-            #aa_ = next(x for x in os_kernel.tasks  if x.name == 'SwitchesBoard')
-            if err[0]:
-              break
-            print(f"api_switch_ls: {i} \n:: {aa_.state}")
-            #await request.write("\r\n")  # check connected if error must return
-            #await request.write("event: " + "msg\r\n")
-            #await request.write("data: " + json.dumps(aa_) + "\r\n")
-            #await request.write(f"id: {time.time()}\r\n")
-            #await request.write("\r\n")
-            await self.web.sleep(92)
-        finally:
-          print(f"api_switch_ls: close")
-          aa_.unsubscribe(scrib)
 
 
     #@authenticate(CREDENTIALS)

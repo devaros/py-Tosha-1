@@ -1,0 +1,41 @@
+    <svg id="e" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse id="d" cx="27.542" cy="27.595" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#306998;paint-order:normal">
+            <animateTransform 
+                attributeName="transform" 
+                type="rotate" 
+                values="90 27.542 27.595; 90 27.542 27.595; 0 27.542 27.595; 0 27.542 27.595; 90 27.542 27.595;" 
+                keyTimes="0; 0.3; 0.4; 0.9; 1" 
+                dur="6s" 
+                repeatCount="indefinite" />
+        </ellipse>
+
+        <ellipse id="c" cx="74.258" cy="27.648" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#ffd43b;paint-order:normal">
+            <animateTransform 
+                attributeName="transform" 
+                type="rotate" 
+                values="0 74.258 27.648; 0 74.258 27.648; 90 74.258 27.648; 90 74.258 27.648; 0 74.258 27.648;" 
+                keyTimes="0; 0.4; 0.5; 0.9; 1" 
+                dur="8s" 
+                repeatCount="indefinite" />
+        </ellipse>
+
+        <ellipse id="a" cx="74.364" cy="74.153" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#306998;paint-order:normal">
+            <animateTransform 
+                attributeName="transform" 
+                type="rotate" 
+                values="0 74.364 74.153; 90 74.364 74.153; 90 74.364 74.153; 0 74.364 74.153; 0 74.364 74.153;" 
+                keyTimes="0; 0.1; 0.5; 0.6; 1" 
+                dur="9s" 
+                repeatCount="indefinite" />
+        </ellipse>
+
+        <ellipse id="b" cx="27.542" cy="74.153" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#ffd43b;paint-order:normal">
+            <animateTransform 
+                attributeName="transform" 
+                type="rotate" 
+                values="0 27.542 74.153; 0 27.542 74.153; 90 27.542 74.153; 90 27.542 74.153; 0 27.542 74.153;" 
+                keyTimes="0; 0.4; 0.5; 0.9; 1" 
+                dur="7s" 
+                repeatCount="indefinite" />
+        </ellipse>
+    </svg>

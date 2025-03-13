@@ -38,7 +38,9 @@ class WebCron():
           grp_name = grp_name[5]
         else: grp_name = None
         
-        aa_ = next(x for x in os_kernel.tasks  if x.name == 'CronScheduler')
+        #aa_ = next(x for x in os_kernel.tasks  if x.name == 'CronScheduler')
+        aa_ = os_kernel.find_task('CronScheduler')
+
 
         data = await read_json(request)
         print("Request data: ",  data)
@@ -55,16 +57,12 @@ class WebCron():
     #@authenticate(CREDENTIALS)
     async def api_cron_ls(self, request):
         #vnt_data = EventData()
+        reload = request.url.split('/')[-1] == 'reload'
 
-        #await request.write("HTTP/1.1 200 OK\r\n")
-        #await request.write("access-control-allow-origin: *\r\n") #,immutable
-        #await request.write("Content-Type: text/event-stream\r\n")
-        #await request.write("Content-Type: text/event-stream\r\n")
-        #await request.write("Cache-Control: no-cache\r\n")
-        #await request.write("Connection: keep-alive\r\n\r\n")
-        #err = [False]
-
-        aa_ = next(x for x in os_kernel.tasks  if x.name == 'CronScheduler')
+        #aa_ = next(x for x in os_kernel.tasks  if x.name == 'CronScheduler')
+        aa_ = os_kernel.find_task('CronScheduler')
+        if reload:
+          aa_.reload()
         if aa_:
           tasks = [(i.enabled, i.schedule, i.id,  i.params,  i.label,  ) for i in aa_.task_list ]
           cmd_list = [(id, label, params, ) for _, id, label, params in aa_.cmd_list ]

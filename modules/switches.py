@@ -18,7 +18,7 @@ class SwitchesBoard(Service):
     AW_LEN = 1
 
     def __init__(self, **kwargs):
-      super().__init__()
+      super().__init__(**kwargs)
 
       print ("self.state: ", self.state, self.AW_LEN)
       for id in range(9):

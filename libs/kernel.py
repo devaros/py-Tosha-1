@@ -14,6 +14,9 @@ class Kernel:
         self.tasks.append(task)
         print(f"Task added: {task.name}")
 
+    def find_task(self, name):
+      return next(x for x in self.tasks  if x.name == name)
+
     def start(self):
         print("Starting kernel")
         loop = asyncio.get_event_loop()
@@ -39,8 +42,7 @@ class Service:
     event_list = []
 
     def __init__(self, name=None):
-        #self.name = name or self.__class__.__name__
-        self.name =  self.__class__.__name__
+        self.name = name or self.__class__.__name__
         #self.AW_LEN = 1 # async await length
         Service._instances.append(self)
 

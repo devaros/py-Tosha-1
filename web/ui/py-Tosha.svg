@@ -1,0 +1,14 @@
+    <svg id="e" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse id="d" cx="27.542" cy="27.595" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#306998;paint-order:normal">
+        </ellipse>
+
+        <ellipse id="c" cx="74.258" cy="27.648" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#ffd43b;paint-order:normal">
+        </ellipse>
+
+        <ellipse id="a" cx="74.364" cy="74.153" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#306998;paint-order:normal">
+        </ellipse>
+
+        <ellipse id="b" cx="27.542" cy="74.153" rx="11.653" ry="23.305" style="fill-rule:evenodd;fill:#ffd43b;paint-order:normal">
+        </ellipse>
+        <text id="e" x="50.211864" y="96.110168" font-size="10" style="fill:#33333300;font-size:10px;text-anchor:middle">py-Tosha</text>
+    </svg>
