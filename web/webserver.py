@@ -253,9 +253,10 @@ class WebServer(Service):
         await self.app.run()
 
     def get_status(self):
-        return json.dumps( {"routes":[i[0] for i in self.app.routes], 
+        #return json.dumps( {"routes":[i[0] for i in self.app.routes], 
+        return {"routes":[i[0] for i in self.app.routes], 
           "port": self.app.port,
           #"name": self.name,
-        })
+        }
 
 
