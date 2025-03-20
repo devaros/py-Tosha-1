@@ -4,7 +4,6 @@ wifi.json
 wifi2.json
 *.psw
 *__old*
-assets
 
 _upload.cmd
 _download.cmd
