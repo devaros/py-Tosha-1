@@ -105,8 +105,9 @@ class WebServer(Service):
         print("WebServer initialized", )
 
         # Определение маршрутов
-        self.app.route('/*')(self.index)   # /web/ui
-        #self.app.route('/assets/*')(self.assets),
+        self.app.route('/*')(self.ui)   # /web/ui
+        self.app.route('/assets/*')(self.ui),
+        self.app.route('/assets2/*')(self.ui),
         self.app.route('/ping')(self.ping)
         self.app.route('/sys_info')(self.sys_info)
         #self.app.route('/api/files')(self.api_files)
@@ -138,7 +139,7 @@ class WebServer(Service):
         #return json.dumps(response_data)
 
     #@authenticate(CREDENTIALS)
-    async def index(self, request):
+    async def ui(self, request):
         await request.write(b"HTTP/1.1 200 OK\r\n")
 
         args = {}

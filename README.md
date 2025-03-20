@@ -6,15 +6,13 @@ This code must be upload to ESP32 chip microPython based
 ```
 ![image info](/doc/01-index.jpg)
 
-другие картинки проекта [Configuration Reference](/doc/images.md)
+[другие картинки проекта](/doc/images.md)
 
 
 ## Structure code
 ```
 
 main.py - файл конфигурации этого устройства
-list_devices
-
 
 
 modules - папка для модулей расширения, каждый модуль это файл или папка принадлежащий(я)
@@ -26,8 +24,10 @@ modules - папка для модулей расширения, каждый м
 
 ```
 
-libs - папка с библиотеками расширяющих возможности устройства
+/libs - папка с библиотеками расширяющих возможности устройства
 
+/web/ui - папка с вашим интерфейсом для этого проекта,
+ можно разработать свой или взять из проекта /devaros/ui-Pytosha-1
 
 
 ### Customize configuration
