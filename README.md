@@ -19,16 +19,18 @@ modules - папка для модулей расширения, каждый м
  каждой отдельной единицы внутреннего модуля устройства.
  Каждый модуль работает в постоянном асинхронном цикле 
  Свойство "state"
- {uid:'sensor_dev_15559', name: 'name_of_unit', data:"any data"}
+ {uid:'sensor_dev_15559', name: 'name_of_unit', time:0, data:"any data"}
+ time - последнее измененное состояние, если изменений небыло время не меняется 
  data - блок инфыормации содержащий произвольные данные
 
 ```
 
 /libs - папка с библиотеками расширяющих возможности устройства
+/modules - модули расширения устройства, 
 
 /web/ui - папка с вашим интерфейсом для этого проекта,
  можно разработать свой или взять из проекта [ui-Tosha-1](https://github.com/devaros/ui-Tosha-1) 
 
 
 ### Customize configuration
-See [Configuration Reference](https:// xxxxxxxxxxxx.xxxxxxxxxxxx.xxxxxxxxxxx /)
+
