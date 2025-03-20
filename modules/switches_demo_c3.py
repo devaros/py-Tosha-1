@@ -13,7 +13,7 @@ pin2 = Pin(2, Pin.IN, Pin.PULL_UP)
 pin9 = Pin(9, Pin.IN, Pin.PULL_UP)  # flash | boot
 
 
-class SwitchesBoard(Service):
+class SwitchesBoard_demo_c3(Service):
     state = {"uid": uid, 'time': None, "name": "switches", "data": []}
     AW_LEN = 1
 

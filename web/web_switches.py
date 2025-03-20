@@ -37,7 +37,7 @@ class WebSwitches():
         else: grp_name = None
         
         #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
-        aa_ = os_kernel.find_task('Switches Board')
+        aa_ = os_kernel.find_task('SwitchesBoard_demo_c3')
 
         data = await read_json(request)
         #print("Request data: ",  grp_name, data[0])
@@ -63,7 +63,7 @@ class WebSwitches():
         err = [False]
         send_ = [False]
         #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
-        aa_ = os_kernel.find_task('Switches Board')
+        aa_ = os_kernel.find_task('SwitchesBoard_demo_c3')
 
         async def scrib():
           try:

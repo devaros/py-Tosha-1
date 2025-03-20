@@ -62,8 +62,10 @@ class CronScheduler(Service):
             self.task_list.append(SchedTask(*t))
         self.relink_task()
       except OSError as e:
-        print('Ошибка открытия файла', '/crontab.json')
+        #print('Error open file', '/crontab.json')
+        OSError ('Error open file /crontab.json')
         #raise e
+      self.relink_task()
 
     def check_data(self):
       dd = self.state['data']

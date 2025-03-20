@@ -5,7 +5,7 @@ from libs.kernel import os_kernel , Kernel, Service, load
 from libs.ble_connect import ble
 from libs.ble_repl import ble_repl
 from libs.net_manager import NetworkManager
-from modules.switches import SwitchesBoard  # переключатели
+from modules.switches_demo_c3 import SwitchesBoard_demo_c3  # переключатели
 from web.webserver import WebServer
 from web.files import Files  # Файловый менеджер 
 from web.web_switches import WebSwitches 
@@ -33,7 +33,7 @@ class init( ):
         net = NetworkManager(name='NET_MANAGER', timezone_offset=7)
         os_kernel.add_task(net)
 
-        sw = SwitchesBoard(name="Switches Board")
+        sw = SwitchesBoard_demo_c3(name="SwitchesBoard_demo_c3")
         os_kernel.add_task(sw)
 
         # Инициализация веб-интерфейса

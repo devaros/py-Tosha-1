@@ -126,15 +126,16 @@ class WebServer(Service):
 
     #@authenticate(CREDENTIALS)
     async def api_data(self, request):
-        requested_data = await read_json(request)
+        data = await read_json(request)
         #print("Handling request for api_data", requested_data)
-        response_data = get_custom_data(requested_data)
+        #response_data = get_custom_data(requested_data)
+        return get_custom_data(data)
 
         #await request.write("HTTP/1.1 200 OK\r\n")
         #await request.write("access-control-allow-origin: *\r\n") #,immutable
         #await request.write("Content-Type: application/json\r\n\r\n")
         #await request.write(json.dumps(response_data))
-        return json.dumps(response_data)
+        #return json.dumps(response_data)
 
     #@authenticate(CREDENTIALS)
     async def index(self, request):
@@ -212,10 +213,11 @@ class WebServer(Service):
 
     #@authenticate(CREDENTIALS)
     async def ping(self, request):
-        print("Handling request for ping")
-        await request.write("HTTP/1.1 200 OK\r\n\r\n")
-        await request.write("pong")
-        print("Ping response sent")
+        #print("Handling request for ping")
+        #await request.write("HTTP/1.1 200 OK\r\n\r\n")
+        #await request.write("pong")
+        #print("Ping response sent")
+        return 'pong'
 
     #@authenticate(CREDENTIALS)
     async def api_long_rq(self, request):
@@ -237,13 +239,16 @@ class WebServer(Service):
 
 
 
-    async def api_send_response(self, request, methods="DELETE, GET, POST, PUT, PATCH, OPTIONS"):  # code=200, message="OK"
+    async def api_send_response(self, request, methods="DELETE, GET, POST, PUT, PATCH, OPTIONS", data=None):  # code=200, message="OK"
         #print(f"Sending response: 200 OK")
         await request.write(f"HTTP/1.1 200 OK\r\n")
         await request.write("access-control-allow-origin: *\r\n")
         await request.write(f"access-control-allow-methods: {methods}\r\n")
         await request.write("Content-Type: application/json\r\n\r\n")
-        await request.write('{"status": true}')
+        if data:
+          await request.write(data)
+        else:
+          await request.write('{"status": true}')
         #print("Response sent")
 
     async def run(self):

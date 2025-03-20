@@ -1,6 +1,7 @@
 #nano_api_server
 import uasyncio as asyncio
 import uerrno
+import json
 
 
 __version__ = '1.0.0'
@@ -11,6 +12,17 @@ http_status = {200:"200 OK" ,401: '401 Unauthorized',
 
 class HttpError(Exception):
     pass
+
+class Response:
+    status = "HTTP/1.1 200 OK\r\n"
+    header = [
+        "access-control-allow-origin: *\r\n",
+        "access-control-allow-methods: {methods}\r\n",
+    ]
+    type = "text/javascript"
+
+    def __init__(*args, **kwargs):
+      pass
 
 class Request:
     url = ""
@@ -88,48 +100,36 @@ class Nanoweb:
             return func
         return decorator
 
+    async def send_resp(self, request, data, status=200):
+                await request.write( f"HTTP/1.1 {status}\r\n")
+                await request.write( "access-control-allow-origin: *\r\n")
+                #await request.write("\r\n")
+
+                if isinstance(data, str):
+                  await request.write( "Content-Type: text/javascript\r\n\r\n")
+                  await request.write(data)
+                elif isinstance(data, dict):
+                  await request.write( "Content-Type: application/json\r\n\r\n")
+                  await request.write( json.dumps(data))
+
     async def generate_output(self, request, handler):
         """Generate output from handler
 
         `handler` can be :
-         * dict representing the template context
-         * string, considered as a path to a file
-         * tuple where the first item is filename and the second
-           is the template context
+         * dict representing the json
+         * string, text content
+         * tuple where the first item is dict or str and the second
+           is the status
          * callable, the output of which is sent to the client
         """
         while True:
-            #print("handler .... ", handler, type(handler))
-            if isinstance(handler, dict):
-                handler = (request.url, handler)
-                print("handler - dict ...")
+            if isinstance(handler, str) or isinstance(handler, dict):
+                await self.send_resp(request, handler)
 
-            if isinstance(handler, str):
-                await write(request, "HTTP/1.1 200 OK\r\n")
-                #await request.write(f"Content-Type: text/javascript\r\n")
-                await request.write(f"Content-Type: application/json\r\n")
-                #print("handler .... str ")
-                await request.write("access-control-allow-origin: *\r\n\r\n")
-                #await send_file(request, handler)
-                await request.write(handler)
-            elif isinstance(handler, tuple):  #file_nm, context
-                #await request.write("access-control-allow-origin: *\r\n\r\n")
-                #status, context = handler
-                filename, context = handler
+            elif isinstance(handler, tuple):
+                status = len(handler)>1 and http_status.get(handler[1]) or http_status[200]
+                await self.send_resp(request, handler[0], status)
 
-                #continue
-                context = context() if callable(context) else context
-                try:
-                    with open(filename, "r") as f:
-                        await write(request, "HTTP/1.1 200 OK\r\n\r\n")
-
-# file may be very big - allocate in memory!!!
-                        for l in f:
-                            await write(request, l.format(**context))
-                except OSError as e:
-                    if e.args[0] != uerrno.ENOENT:
-                        raise
-                    raise HttpError(request, 404, "File Not Found")
             else:
                 handler = await handler(request)
                 #print("handler .... else... ")
