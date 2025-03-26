@@ -6,8 +6,7 @@ import json
 
 __version__ = '1.0.0'
 
-http_status = {200:"200 OK" ,401: '401 Unauthorized',
-  404: "404 Not Found",
+http_status = {200:"200 OK", 401: '401 Unauthorized', 404: "404 Not Found",
   500: "500 Internal error", 501: "501 Not Implemented", 505: "505 Version Not Supported",}
 
 class HttpError(Exception):
@@ -56,6 +55,8 @@ async def write(request, data):
 async def error(request, code, reason):
     await request.write("HTTP/1.1 %s %s\r\n" % (code, reason))
     #await request.write("access-control-allow-origin: *\r\n\r\n")  #123456
+    await request.write("\r\n\r\n")  #123456
+    print('request_error: ', code, request.url)
     await request.write("<h1>%s</h1>" % (reason))
 
 
@@ -85,7 +86,7 @@ class Nanoweb:
     callback_request = None
     callback_error = staticmethod(error)
 
-    STATIC_DIR = 'web/'
+    STATIC_DIR = '/web/ui'
     INDEX_FILE = STATIC_DIR + 'index.html'
 
     def __init__(self, port=80, address='0.0.0.0'):
@@ -101,16 +102,34 @@ class Nanoweb:
         return decorator
 
     async def send_resp(self, request, data, status=200):
-                await request.write( f"HTTP/1.1 {status}\r\n")
+                await request.write( f"HTTP/1.1 {http_status[status]}\r\n")
+                #await request.write( f"HTTP/2 {http_status[status]}\r\n")
                 await request.write( "access-control-allow-origin: *\r\n")
                 #await request.write("\r\n")
 
+                #await request.write("Connection: close\r\n")
+                #await request.write("Connection: keep-alive\r\n")
+                #await request.write("Keep-Alive: timeout=1\r\n")
+
+                #await asyncio.sleep(1)
+
                 if isinstance(data, str):
-                  await request.write( "Content-Type: text/javascript\r\n\r\n")
+                  #print('request_handler_44: ',  data)
+                  await request.write(f"Content-Length: {len(data)}\r\n")
+                  #await request.write(f"Content-Length: 1\r\n")
+                  await request.write( "Content-Type: text/html\r\n\r\n")
+                  #await request.write( "Content-Type: application/json\r\n\r\n")
+                  #await request.write( "\r\n\r\n")
                   await request.write(data)
                 elif isinstance(data, dict):
+                  dd_ = json.dumps(data)
+                  await request.write(f"Content-Length: {len(dd_)}\r\n")
                   await request.write( "Content-Type: application/json\r\n\r\n")
-                  await request.write( json.dumps(data))
+                  await request.write( dd_)
+
+                #await request.write( "\r\n")
+                await asyncio.sleep(1)
+                #await request.close()
 
     async def generate_output(self, request, handler):
         """Generate output from handler
@@ -127,7 +146,9 @@ class Nanoweb:
                 await self.send_resp(request, handler)
 
             elif isinstance(handler, tuple):
-                status = len(handler)>1 and http_status.get(handler[1]) or http_status[200]
+                #status = len(handler)>1 and http_status.get(handler[1]) or http_status[200]
+                status = len(handler)>1 and handler[1] or 200
+                #print('request_handler_33: ', handler, status)
                 await self.send_resp(request, handler[0], status)
 
             else:
@@ -184,8 +205,9 @@ class Nanoweb:
                     #for route, handler in self.routes.items():
                     for route, handler in self.routes:
                         if route == request.url \
-                            or (route[-1] == '*' and
-                                request.url.startswith(route[:-1])):
+                            or (route[-1] == '*'  and  request.url.startswith(route[:-1]) 
+                                and route.count('/')<=request.url.count('/')
+                            ):
                             request.route = route
                             await self.generate_output(request, handler)
                             break

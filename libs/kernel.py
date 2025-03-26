@@ -15,7 +15,10 @@ class Kernel:
         print(f"Task added: {task.name}")
 
     def find_task(self, name):
-      return next(x for x in self.tasks  if x.name == name)
+      try:
+        return next(x for x in self.tasks  if x.name == name)
+      except StopIteration:
+        return None
 
     def start(self):
         print("Starting kernel")
@@ -36,17 +39,26 @@ class Kernel:
 
 class Service:
     _instances = []
-    ALLOW_ARGS = ['state']
+    #ALLOW_ARGS = ['state']
     AW_LEN = 1 # async await length min:1
-    state = {}
-    event_list = []
+    state = None
+    event_list = None
 
-    def __init__(self, name=None):
-        self.name = name or self.__class__.__name__
+    def __init__(self, name=None, **kwargs):
+#or kwargs.get('name')
+        self.state = {}
+        self.event_list = []
+        self.name = name  or self.__class__.__name__  # it is system name variabel
+        if kwargs.get('label'):                      # it is human name/label variable fro use in interface
+          self.state['label'] = kwargs.get('label')
+
         #self.AW_LEN = 1 # async await length
         Service._instances.append(self)
 
-    def set_attr(self, **kwargs):
+    def __str__(self):
+      return self.name
+
+    def set_attr__old2(self, **kwargs):
       # set any attr
       for arg in kwargs:
         if hasattr(self, arg) and (arg in self.ALLOW_ARGS):

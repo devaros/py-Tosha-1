@@ -11,6 +11,7 @@ import asyncio
 CREDENTIALS = ('foo', 'bar')
 
 content_type = {'js':'text/javascript',  'svg':'image/svg+xml', 'json':'application/json', 'stream':'application/octet-stream'}
+# text/html
 
 async def send_header_api(request, cnt_type='json'):
     await request.write("HTTP/1.1 200 OK\r\n")
@@ -101,7 +102,7 @@ class WebServer(Service):
         self.kernel = kernel
         self.app = Nanoweb(80)
         self.app.assets_extensions += ('ico',)
-        self.app.STATIC_DIR = '/web/ui'
+        #self.app.STATIC_DIR = '/web/ui'
         print("WebServer initialized", )
 
         # Определение маршрутов
@@ -116,8 +117,8 @@ class WebServer(Service):
         self.app.route('/api/status')(self.api_status)
         self.app.route('/api/api_long_rq')(self.api_long_rq)
 
-    async def sleep(self, time):
-        await asyncio.sleep(time)
+    #async def sleep(self, time):
+        #await asyncio.sleep(time)
 
     async def render_template(self, request, pages, context=None):
         print(f"Rendering template: {pages}")
@@ -214,10 +215,6 @@ class WebServer(Service):
 
     #@authenticate(CREDENTIALS)
     async def ping(self, request):
-        #print("Handling request for ping")
-        #await request.write("HTTP/1.1 200 OK\r\n\r\n")
-        #await request.write("pong")
-        #print("Ping response sent")
         return 'pong'
 
     #@authenticate(CREDENTIALS)
@@ -260,7 +257,7 @@ class WebServer(Service):
 
     def get_status(self):
         #return json.dumps( {"routes":[i[0] for i in self.app.routes], 
-        return {"routes":[i[0] for i in self.app.routes], 
+        return { "routes":[i[0] for i in self.app.routes], 
           "port": self.app.port,
           #"name": self.name,
         }

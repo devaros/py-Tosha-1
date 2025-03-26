@@ -1,6 +1,6 @@
 import gc
 import machine as m
-from machine import reset
+from machine import reset, Pin
 from libs.kernel import os_kernel , Kernel, Service, load
 from libs.ble_connect import ble
 from libs.ble_repl import ble_repl
@@ -9,24 +9,27 @@ from modules.switches_demo_c3 import SwitchesBoard_demo_c3  # переключа
 from web.webserver import WebServer
 from web.files import Files  # Файловый менеджер 
 from web.web_switches import WebSwitches 
+from web.web_standard import WebStandard
 from web.web_cron import WebCron
-
 from web.net_configure import NetConfig 
 from modules.cron import CronScheduler
+from modules.GPIO_board import GPIO_board
+
 #import webrepl
 #webrepl.start()  #port 8266
 
 net = None
 sw = None
 cron = None
+pins = None
 
 list_devs =[11,22]
 
-h = "h.ble, h.net, h.web, dev_list, reset, ..."
+h = "reset(), net.sta.scan(), net.connect(lan,psw), net.status, ..."
 
 class init( ):
     #def __init__(self):
-        global net, sw, cron
+        global net, sw, cron, pins
         #self.os_kernel = Kernel()
 
         # Инициализация сетевого менеджера
@@ -35,6 +38,20 @@ class init( ):
 
         sw = SwitchesBoard_demo_c3(name="SwitchesBoard_demo_c3")
         os_kernel.add_task(sw)
+
+        pins = GPIO_board([
+          #(0, Pin.IN, Pin.PULL_UP),
+          (8, Pin.OUT),
+          (9, Pin.IN)
+        ], name="GPIO_board")
+        os_kernel.add_task(pins)
+
+        pins2 = GPIO_board([
+          #(0, Pin.IN, Pin.PULL_UP),
+          (8, Pin.OUT),
+          (9, Pin.IN)
+        ], name="GPIO_board2", label="GPIO_board-2")
+        os_kernel.add_task(pins2)
 
         # Инициализация веб-интерфейса
         web = WebServer(name="WebServer", kernel=os_kernel)
@@ -46,6 +63,10 @@ class init( ):
 
         # Инициализация web-интерфейса переключателей
         _ = WebSwitches(name="Web switches", web=web)
+
+        # Инициализация web-интерфейса стандартного управления
+        _ = WebStandard(name="Web standard", web=web)
+
 
         # Инициализация web-интерфейса конфигуратора сети
         _ = NetConfig(name="Network Manager", web=web, net_manager=net)

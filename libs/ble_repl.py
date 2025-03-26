@@ -9,6 +9,7 @@ import os
 import micropython
 from micropython import const
 import machine
+import uasyncio as asyncio
 
 #from .ble_uart_peripheral import  BLEUART
 from .ble_connect import  BLEUART
@@ -78,14 +79,15 @@ class BLEUARTStream(io.IOBase):
             schedule_in(self._flush, 50)
 
 
-def start():
+async def start():
     ble = bluetooth.BLE()
-    uart = BLEUART(ble, name="mpy-repl")
+    uart = BLEUART(ble, name="tosha-repl")
     stream = BLEUARTStream(uart)
 
     os.dupterm(stream)
 
 
 def ble_repl():
-    start()
+    asyncio.create_task(start())
+    #start()
 

@@ -7,7 +7,7 @@ from .webserver import read_json
 import json
 
 
-class WebSwitches():
+class WebStandard():
     def __init__(self, name, web):
         #super().__init__(name)
         #if web is None:
@@ -15,29 +15,36 @@ class WebSwitches():
 
         web.web_services.append( self.__class__.__name__)
         self.web=web
-        self.web.app.route('/api/switches/ls*')(self.api_switch_ls)
-        self.web.app.route('/api/switches/set*')(self.api_switch_set_val)
+        self.web.app.route('/api/standard/*')(self.api_board)
+        self.web.app.route('/api/standard/ls')(self.api_ls)
+        self.web.app.route('/api/standard/set*')(self.api_set_val)
 
 
     #@authenticate(CREDENTIALS)
-    async def api_switch_set_val(self, request):
-        #print("Request api_switch_set_val: ")
-
+    async def api_set_val(self, request):
+        #print('request_set: start', request.method, request.url)
         if request.method == "OPTIONS":
             await self.web.api_send_response(request)
             return
 
-        if request.method != "PUT":
+        if not request.method in ["PUT","POST"]:
             print("Method not allowed", request.method)
             raise HttpError(request, 501, "Not Implemented")
 
-        grp_name = request.url.split('/')
-        if len(grp_name)>4:
-          grp_name = grp_name[5]
-        else: grp_name = None
-        
-        #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
-        aa_ = os_kernel.find_task('SwitchesBoard_demo_c3')
+        #print('request_set_1: ', request.url, request.method)
+        #return {"srr":"OK"}
+        #return 'rgkjfgttttttttunutrng trungutr ngurnbiutr nutrnb ubntru bnrub ntrubn uitrnibt nibutr nbitrnb triu'
+
+      
+        nm_module = request.url.split('/')[-1]
+        aa_ = os_kernel.find_task(nm_module)
+        print('request_set_3: ', aa_, nm_module)
+
+        if not aa_:
+          #raise HttpError(request, 404, "File Not Found")
+          return ('module not found', 404)
+          #return ' 123456 '
+
 
         data = await read_json(request)
         #print("Request data: ",  grp_name, data[0])
@@ -48,8 +55,23 @@ class WebSwitches():
         return ' '
 
 
+
     #@authenticate(CREDENTIALS)
-    async def api_switch_ls(self, request):
+    async def api_ls(self, request):
+
+        tt = []
+        for t in os_kernel.tasks:
+          if t.state.get("type") == "web_standard":
+            tt.append([t.name, t.state.get("label"),]) 
+
+
+        #print(f"api_standard_ls: {tt}")
+        return {"modules":tt}
+
+
+
+
+    async def api_board(self, request):
         #vnt_data = EventData()
 
         await request.write("HTTP/1.1 200 OK\r\n")
@@ -61,7 +83,12 @@ class WebSwitches():
         err = [False]
         send_ = [False]
         #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
-        aa_ = os_kernel.find_task('SwitchesBoard_demo_c3')
+        nm_module = request.url.split('/')[-1]
+        aa_ = os_kernel.find_task(nm_module)
+        print(f"api_switch_board: ", nm_module, aa_, )
+
+        if not aa_:
+          return ('module not found', 404)
 
         async def scrib():
           try:
@@ -81,7 +108,7 @@ class WebSwitches():
             send_[0] = False
 
         aa_.subscribe( scrib )
-        print(f"api_switch_ls: start")
+        #print(f"api_switch_ls: start")
 
         try:
           await scrib()
@@ -89,11 +116,6 @@ class WebSwitches():
             if err[0]:
               break
             #print(f"api_switch_ls: {i} \n:: {aa_.state}")
-            #await request.write("\r\n")  # check connected if error must return
-            #await request.write("event: " + "msg\r\n")
-            #await request.write("data: " + json.dumps(aa_) + "\r\n")
-            #await request.write(f"id: {time.time()}\r\n")
-            #await request.write("\r\n")
             #await self.web.sleep(92)
             await asyncio.sleep(92)
         finally:

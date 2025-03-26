@@ -3,7 +3,6 @@ from libs.kernel import Service
 import random
 import time
 
-uid = "switches_board_c3_214535"
 
 from machine import Pin
 led = Pin(8, Pin.OUT, 1)
@@ -14,13 +13,14 @@ pin9 = Pin(9, Pin.IN, Pin.PULL_UP)  # flash | boot
 
 
 class SwitchesBoard_demo_c3(Service):
-    state = {"uid": uid, 'time': None, "name": "switches", "data": []}
+    #state = { 'time': None, "name": "switches", "label":"Switches demo" ,"type":"web_standard", "data": []}
     AW_LEN = 1
 
     def __init__(self, **kwargs):
       super().__init__(**kwargs)
+      self.state = { 'time': None, "name":kwargs.get('name') or self.name, "label":kwargs.get('label') or "Switches demo" ,"type":"web_standard", "data": []}
 
-      print ("self.state: ", self.state, self.AW_LEN)
+      #print ("self.state: ", self.state, self.AW_LEN)
       for id in range(9):
         self.state['data'].append(  {"id":id,"value": random.randrange(10,99999) } ) 
 
@@ -34,6 +34,12 @@ class SwitchesBoard_demo_c3(Service):
       self.state['data'][6]['name'] = 'PIN-GPIO2'
       self.state['data'][7]['name'] = 'schedule-id-7'
       self.state['data'][8]['name'] = 'schedule-id-8'
+
+      for i in self.state['data']:
+        i["indicator"] = "digital" if i["id"]>4 else "analog"
+        i["control"] = "digital" 
+
+
 
       self.alarm = [0,0]
       pin0.irq(trigger= Pin.IRQ_RISING | Pin.IRQ_FALLING, handler=self.change_pin(0))
@@ -90,7 +96,7 @@ class SwitchesBoard_demo_c3(Service):
 
       return self.state['time'] == tt # if we changed something
 
-    def state_full(self):
+    def state_full__old2(self):
         #print(f"Состояние датчика {self.name}: {self.state}", self.pin)
         return {'name':self.name, 'type':self.__class__.__name__, 'state': self.state, 'info': self.info}   # данные в json формате
 

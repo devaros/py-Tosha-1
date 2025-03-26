@@ -36,7 +36,7 @@ _ADV_APPEARANCE_GENERIC_COMPUTER = const(128)
 
 
 class BLEUART:
-    def __init__(self, ble, name="mpy-uart", rxbuf=100):
+    def __init__(self, ble, name="tosha-uart", rxbuf=100):
         self._ble = ble
         self._ble.active(True)
         self._ble.irq(self._irq)
@@ -58,14 +58,14 @@ class BLEUART:
         if event == _IRQ_CENTRAL_CONNECT:
             conn_handle, _, _ = data
             self._connections.add(conn_handle)
-            print('IRQ_CONNECT;', )
+            print('BLE_CONNECT;', )
         elif event == _IRQ_CENTRAL_DISCONNECT:
             conn_handle, _, _ = data
             if conn_handle in self._connections:
                 self._connections.remove(conn_handle)
             # Start advertising again to allow a new connection.
             self._advertise()
-            print('IRQ_DISCONNECT;', )
+            print('BLE_DISCONNECT;', )
 
         elif event == _IRQ_GATTS_WRITE:
             conn_handle, value_handle = data
@@ -94,7 +94,7 @@ class BLEUART:
             print('gap_disconnected;', )
         self._connections.clear()
 
-    def _advertise(self, interval_us=500000):
+    def _advertise(self, interval_us=500_000):
         self._ble.gap_advertise(interval_us, adv_data=self._payload)
 
 
