@@ -66,7 +66,8 @@ class WebCron():
         if aa_:
           tasks = [(i.enabled, i.schedule, i.id,  i.params,  i.label,  ) for i in aa_.task_list ]
           cmd_list = [(id, label, params, ) for _, id, label, params in aa_.cmd_list ]
-          return json.dumps({"tasks":tasks, "cmd_list": cmd_list})
+          #return json.dumps({"tasks":tasks, "cmd_list": cmd_list})
+          return {"tasks":tasks, "cmd_list": cmd_list}
           #return json.dumps( aa_.status)
     
 

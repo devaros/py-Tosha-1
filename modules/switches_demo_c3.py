@@ -5,11 +5,11 @@ import time
 
 
 from machine import Pin
-led = Pin(8, Pin.OUT, 1)
-pin0 = Pin(0, Pin.IN, Pin.PULL_UP)
-pin1 = Pin(1, Pin.OUT, 0)
-pin2 = Pin(2, Pin.IN, Pin.PULL_UP)
-pin9 = Pin(9, Pin.IN, Pin.PULL_UP)  # flash | boot
+led = None
+pin0 = None
+pin1 = None
+pin2 = None
+pin9 = None  # flash | boot
 
 
 class SwitchesBoard_demo_c3(Service):
@@ -18,6 +18,14 @@ class SwitchesBoard_demo_c3(Service):
 
     def __init__(self, **kwargs):
       super().__init__(**kwargs)
+      global led, pin0, pin1, pin2, pin9
+      led = Pin(8, Pin.OUT, 1)
+      pin0 = Pin(0, Pin.IN, Pin.PULL_UP)
+      pin1 = Pin(1, Pin.OUT, 0)
+      pin2 = Pin(2, Pin.IN, Pin.PULL_UP)
+      pin9 = Pin(9, Pin.IN, Pin.PULL_UP)  # flash | boot
+
+
       self.state = { 'time': None, "name":kwargs.get('name') or self.name, "label":kwargs.get('label') or "Switches demo" ,"type":"web_standard", "data": []}
 
       #print ("self.state: ", self.state, self.AW_LEN)

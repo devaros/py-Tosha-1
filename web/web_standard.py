@@ -1,6 +1,6 @@
 from libs.kernel import os_kernel
 from .nanowebapi import HttpError, EventData
-import asyncio
+import uasyncio as asyncio
 #import os, json,gc,time
 from .webserver import read_json
        #, authenticate, get_custom_data, get_memory, get_custom_data, get_memory, CREDENTIALS

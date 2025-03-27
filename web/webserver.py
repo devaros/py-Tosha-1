@@ -6,7 +6,7 @@ from libs.kernel import Service, load
 from ubinascii import a2b_base64 as base64_decode
 import time
 import gc
-import asyncio
+import uasyncio as asyncio
 
 CREDENTIALS = ('foo', 'bar')
 
@@ -141,40 +141,43 @@ class WebServer(Service):
 
     #@authenticate(CREDENTIALS)
     async def ui(self, request):
-        await request.write(b"HTTP/1.1 200 OK\r\n")
 
         args = {}
         #filename = request.url.split('/')[-1]
         fullname = request.url
-        await request.write(f"Cache-Control: max-age=9915\r\n") #,immutable
-
-        ext = request.url.split('/')[-1].split('.')
-        ext = ext[-1] if len(ext)>1 else ''
-        cnt_type = content_type.get(ext)
-        if cnt_type: 
-          await request.write(f"Content-Type: {cnt_type}\r\n")
 
         #if filename =='/' or ext: filename = '/index.html'
+        ext = request.url.split('/')[-1].split('.')
+        ext = ext[-1] if len(ext)>1 else ''
         if not ext: fullname = '/index.html'
 
         path = '/'.join( request.url.split('/')[:-1] )
 #"/".join( "/asset/index.ggg".split('/')[:-1 ])
         files = os.listdir(self.app.STATIC_DIR+path)
         filenm = fullname.split('/')[-1]       
+        gzip = False
         if not filenm in files:
           if filenm+'.gz' in files:
             fullname+='.gz'
             args['binary']=True
-            await request.write(f"Content-Encoding: gzip\r\n")
+            gzip = True
+          else:
+            return 'file not found', 404
 
-        #if ext=='svg': 
-          #args = {'binary': True}
+        await request.write(b"HTTP/1.1 200 OK\r\n")
+        await request.write(f"Cache-Control: max-age=9915\r\n") #,immutable
+
+        cnt_type = content_type.get(ext)
+        if cnt_type: 
+          await request.write(f"Content-Type: {cnt_type}\r\n")
+        if gzip:
+          await request.write(f"Content-Encoding: gzip\r\n")
 
         #await request.write("Connection: keep-alive\r\n")
         #await request.write("Keep-Alive: timeout=5\r\n")
         os.listdir(self.app.STATIC_DIR)
 
-        print("request.url: ", fullname, filenm, files )
+        #print("request.url: ", fullname, filenm, files )
         await request.write("\r\n")
         await send_file(
             request,
