@@ -115,7 +115,7 @@ class Nanoweb:
 
                 if isinstance(data, str):
                   #print('request_handler_44: ',  data)
-                  await request.write(f"Content-Length: {len(data)}\r\n")
+                  #await request.write(f"Content-Length: {len(data)}\r\n")
                   #await request.write(f"Content-Length: 1\r\n")
                   await request.write( "Content-Type: text/html\r\n\r\n")
                   #await request.write( "Content-Type: application/json\r\n\r\n")
@@ -123,7 +123,7 @@ class Nanoweb:
                   await request.write(data)
                 elif isinstance(data, dict):
                   dd_ = json.dumps(data)
-                  await request.write(f"Content-Length: {len(dd_)}\r\n")
+                  #await request.write(f"Content-Length: {len(dd_)}\r\n")
                   await request.write( "Content-Type: application/json\r\n\r\n")
                   await request.write( dd_)
 

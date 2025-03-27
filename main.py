@@ -5,7 +5,7 @@ from libs.kernel import os_kernel , Kernel, Service, load
 from libs.ble_connect import ble
 from libs.ble_repl import ble_repl
 from libs.net_manager import NetworkManager
-from modules.switches_demo_c3 import SwitchesBoard_demo_c3  # переключатели
+from modules.switches_demo_c3 import SwitchesBoard_demo_c3 
 from web.webserver import WebServer
 from web.files import Files  # Файловый менеджер 
 from web.web_switches import WebSwitches 
@@ -19,11 +19,9 @@ from modules.GPIO_board import GPIO_board
 #webrepl.start()  #port 8266
 
 net = None
-sw = None
+led = None
 cron = None
 pins = None
-
-list_devs =[11,22]
 
 h = "reset(), net.sta.scan(), net.connect(lan,psw), net.status, ..."
 
@@ -36,21 +34,25 @@ class init( ):
         net = NetworkManager(name='NET_MANAGER', timezone_offset=7)
         os_kernel.add_task(net)
 
-        sw = SwitchesBoard_demo_c3(name="SwitchesBoard_demo_c3")
-        os_kernel.add_task(sw)
+        #sw = SwitchesBoard_demo_c3(name="SwitchesBoard_demo_c3")
+        #os_kernel.add_task(sw)
 
         pins = GPIO_board([
           #(0, Pin.IN, Pin.PULL_UP),
-          (8, Pin.OUT),
-          (9, Pin.IN)
-        ], name="GPIO_board", group=3)
+          (2, Pin.OUT), #LED
+          #(8, Pin.OUT), #LED
+          #(9, Pin.IN), #FLASH
+          (0, Pin.IN), #FLASH
+        ], name="GPIO_board")
         os_kernel.add_task(pins)
 
         pins2 = GPIO_board([
           #(0, Pin.IN, Pin.PULL_UP),
-          (8, Pin.OUT),
-          (9, Pin.IN)
-        ], name="GPIO_board2", label="GPIO_board-2", group=3)
+          (2, Pin.OUT), #LED
+          #(8, Pin.OUT), #LED
+          #(9, Pin.IN), #FLASH
+          (0, Pin.IN), #FLASH
+        ], name="GPIO_board2", label="GPIO_board-2")
         os_kernel.add_task(pins2)
 
         # Инициализация веб-интерфейса
@@ -62,7 +64,7 @@ class init( ):
         _ = Files(name="Web file manager", web=web)
 
         # Инициализация web-интерфейса переключателей
-        _ = WebSwitches(name="Web switches", web=web)
+        #_ = WebSwitches(name="Web switches", web=web)
 
         # Инициализация web-интерфейса стандартного управления
         _ = WebStandard(name="Web standard", web=web)
@@ -71,14 +73,14 @@ class init( ):
         # Инициализация web-интерфейса конфигуратора сети
         _ = NetConfig(name="Network Manager", web=web, net_manager=net)
 
-        _ = WebCron(name="Web cron", web=web)
-
-
         cron = CronScheduler()
         os_kernel.add_task(cron)
 
-        cron.append_command( 22,  sw.set_value, 'Включить выход', (8, 1))
-        cron.append_command( 11,  sw.set_value, 'Отключить выход', {"id":7, "value":0} )
+        _ = WebCron(name="Web cron", web=web)
+
+        cron.append_command( 22,  pins.set_value, 'Включить LED', (2, 0))
+        cron.append_command( 11,  pins.set_value, 'Отключить LED', {"id":2, "value":1} )
+
 
         #print("Starting OS Kernel")
         os_kernel.start()

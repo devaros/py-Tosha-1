@@ -4,21 +4,8 @@ import random
 import time
 import json
 
-uid = "cron_prog_c3_814632"
 
 from machine import Pin
-#led = Pin(7, Pin.OUT)
-
-#json_template = {"uid": uid, "name": "switches", "data": [{"id":0,"state":"off","action":"/api/switches?id=nn"}] }
-#json_template = {"uid": uid, "name": "switches", "data": [{"id":0,"value":0,"type":"boolean","write":True} ] }
-json_template = {"uid": uid, "name": "switches", "data": [
-   {"id":0,"value":0 },
-   {"id":1,"value":0 },
-   {"id":2,"value":0 },
-   {"id":3,"value":0 },
-   {"id":4,"value":0 },
-] }
-
 
 class SchedTask():
   id = 0
@@ -38,10 +25,7 @@ class SchedTask():
 
 
 class CronScheduler(Service):
-    state = {"uid": uid, 'time': None, "name": "cron_scheduler", "data": [
-      #["dd","dw","hh","mm", "task"],
-      #["id", "dd dw hh mm", "task", "params"],
-    ]}
+    state = { 'time': None, "name": "cron_scheduler", "data": []}
     AW_LEN = 17
     task_list = []
     cmd_list = []
@@ -132,7 +116,6 @@ class CronScheduler(Service):
           print(f"run_task_error: {hh}:{mm}", t.id, t.label, t.params)
           t.error = "error"
           print (e)
-
 
       #self.state['time'] = time.time()
 

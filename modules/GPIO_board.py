@@ -2,15 +2,7 @@ import uasyncio as asyncio
 from libs.kernel import Service
 import random
 import time
-
 from machine import Pin
-
-led = Pin(8, Pin.OUT, 1)
-pin0 = Pin(0, Pin.IN, Pin.PULL_UP)
-pin1 = Pin(1, Pin.OUT, 0)
-pin2 = Pin(2, Pin.IN, Pin.PULL_UP)
-pin9 = Pin(9, Pin.IN, Pin.PULL_UP)  # flash | boot
-
 
 class GPIO_board(Service):
     #state = {'time': None, "name": "GPIO_board", "label":"GPIO board control", "type":"web_standard", "data": []}
