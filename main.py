@@ -43,14 +43,14 @@ class init( ):
           #(0, Pin.IN, Pin.PULL_UP),
           (8, Pin.OUT),
           (9, Pin.IN)
-        ], name="GPIO_board")
+        ], name="GPIO_board", group=3)
         os_kernel.add_task(pins)
 
         pins2 = GPIO_board([
           #(0, Pin.IN, Pin.PULL_UP),
           (8, Pin.OUT),
           (9, Pin.IN)
-        ], name="GPIO_board2", label="GPIO_board-2")
+        ], name="GPIO_board2", label="GPIO_board-2", group=3)
         os_kernel.add_task(pins2)
 
         # Инициализация веб-интерфейса
