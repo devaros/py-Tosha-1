@@ -1,5 +1,5 @@
 # webserver.py
-from .nanowebapi import Nanoweb,send_file,HttpError
+from .nanowebapi import Nanoweb, send_file, HttpError, cou_req
 import json
 import os
 from libs.kernel import Service, load
@@ -54,9 +54,7 @@ def get_custom_data(requested_data):
         #elif item == 'sensor_list':
             #data['sensor_list'] = get_sensor_list()
     data['load'] = min(1,load[0])
-
-
-
+    data['cou_req'] = cou_req[0]
         # Добавляйте сюда любые другие данные, которые могут потребоваться
     return data
 
@@ -115,7 +113,7 @@ class WebServer(Service):
         #self.app.route('/api')(self.api_data)
         self.app.route('/api/data')(self.api_data)
         self.app.route('/api/status')(self.api_status)
-        self.app.route('/api/api_long_rq')(self.api_long_rq)
+        #self.app.route('/api/api_long_rq')(self.api_long_rq)
 
     #async def sleep(self, time):
         #await asyncio.sleep(time)
@@ -133,11 +131,6 @@ class WebServer(Service):
         #response_data = get_custom_data(requested_data)
         return get_custom_data(data)
 
-        #await request.write("HTTP/1.1 200 OK\r\n")
-        #await request.write("access-control-allow-origin: *\r\n") #,immutable
-        #await request.write("Content-Type: application/json\r\n\r\n")
-        #await request.write(json.dumps(response_data))
-        #return json.dumps(response_data)
 
     #@authenticate(CREDENTIALS)
     async def ui(self, request):
@@ -221,7 +214,7 @@ class WebServer(Service):
         return 'pong'
 
     #@authenticate(CREDENTIALS)
-    async def api_long_rq(self, request):
+    async def api_long_rq__old2(self, request):
         await request.write("HTTP/1.1 200 OK\r\n")
         await request.write("access-control-allow-origin: *\r\n") #,immutable
         #await request.write("Content-Type: text/event-stream\r\n")

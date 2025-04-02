@@ -27,6 +27,8 @@ class SwitchesBoard_demo_c3(Service):
 
 
       self.state = { 'time': None, "name":kwargs.get('name') or self.name, "label":kwargs.get('label') or "Switches demo" ,"type":"web_standard", "data": []}
+      if kwargs.get('group'):
+        self.state['group'] = kwargs.get('group')
 
       #print ("self.state: ", self.state, self.AW_LEN)
       for id in range(9):

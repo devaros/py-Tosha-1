@@ -20,6 +20,9 @@ class Kernel:
       except StopIteration:
         return None
 
+    def find_by_group(self, group):
+        return [x for x in self.tasks  if str(x.state.get('group')) == str(group) or x.state.get('name') == group ]
+
     def start(self):
         print("Starting kernel")
         loop = asyncio.get_event_loop()
@@ -75,7 +78,7 @@ class Service:
     async def subscribe_handler(self):
         for proc in self.event_list:
           try:
-            await proc()
+            await proc(self)
           except Exception as e:
             self.unsubscribe(proc)
 

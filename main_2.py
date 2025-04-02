@@ -39,19 +39,19 @@ class init( ):
 
         pins = GPIO_board([
           #(0, Pin.IN, Pin.PULL_UP),
-          (2, Pin.OUT), #LED
-          #(8, Pin.OUT), #LED
-          #(9, Pin.IN), #FLASH
-          (0, Pin.IN), #FLASH
+          #(2, Pin.OUT), #LED
+          (8, Pin.OUT), #LED
+          (9, Pin.IN), #FLASH
+          #(0, Pin.IN), #FLASH
         ], name="GPIO_board", group=2)
         os_kernel.add_task(pins)
 
         pins2 = GPIO_board([
           #(0, Pin.IN, Pin.PULL_UP),
-          (2, Pin.OUT), #LED
-          #(8, Pin.OUT), #LED
-          #(9, Pin.IN), #FLASH
-          (0, Pin.IN), #FLASH
+          #(2, Pin.OUT), #LED
+          (8, Pin.OUT), #LED
+          (9, Pin.IN), #FLASH
+          #(0, Pin.IN), #FLASH
         ], name="GPIO_board2", label="GPIO_board-2", group=2)
         os_kernel.add_task(pins2)
 

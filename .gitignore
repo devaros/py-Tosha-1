@@ -2,6 +2,7 @@
 smallest-esp32-c3-board-pinout.jpg
 wifi.json
 wifi2.json
+crontab.json
 *.psw
 *__old*
 

@@ -13,6 +13,8 @@ class GPIO_board(Service):
       super().__init__(**kwargs)
       self.pins = {}
       self.state = { 'time': None, "name": kwargs.get('name') or self.name, "label": kwargs.get('label') or "GPIO board control", "type":"web_standard", "data": []}
+      if kwargs.get('group'):
+        self.state['group'] = kwargs.get('group')
 
       for p in pins:
         p_ = Pin(*p)

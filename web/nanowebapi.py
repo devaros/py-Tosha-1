@@ -9,6 +9,8 @@ __version__ = '1.0.0'
 http_status = {200:"200 OK", 401: '401 Unauthorized', 404: "404 Not Found",
   500: "500 Internal error", 501: "501 Not Implemented", 505: "505 Version Not Supported",}
 
+cou_req=[0]  # if cou 8 it ceil
+
 class HttpError(Exception):
     pass
 
@@ -161,6 +163,10 @@ class Nanoweb:
             break
 
     async def handle(self, reader, writer):
+        cou_req[0] +=1
+        if cou_req[0]>5:
+          print ('warn max-8-req: cou_req:', cou_req[0])
+
         items = await reader.readline()
         items = items.decode('ascii').split()
         if len(items) != 3:
@@ -239,6 +245,8 @@ class Nanoweb:
                 raise
         finally:
             await writer.aclose()
+            cou_req[0]-=1
+            #print ('cou_req2:', cou_req[0])
 
     async def run(self):
         return await asyncio.start_server(self.handle, self.address, self.port)

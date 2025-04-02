@@ -36,15 +36,12 @@ class WebSwitches():
           grp_name = grp_name[5]
         else: grp_name = None
         
-        #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
         aa_ = os_kernel.find_task('SwitchesBoard_demo_c3')
 
         data = await read_json(request)
         #print("Request data: ",  grp_name, data[0])
-        #await 
         aa_.set_value( data[0]['id'], data[0]['value'])
         #print(f"api_switch_ls: {aa_}")
-        #return json.dumps(aa_.state)
         return ' '
 
 
@@ -63,7 +60,7 @@ class WebSwitches():
         #aa_ = next(x for x in os_kernel.tasks  if x.name == 'Switches Board')
         aa_ = os_kernel.find_task('SwitchesBoard_demo_c3')
 
-        async def scrib():
+        async def scrib(inst):
           try:
             while send_[0]:
               #await self.web.sleep(1)
@@ -76,7 +73,7 @@ class WebSwitches():
             await request.write("\r\n")
           except Exception as e:
             err[0] = True
-            raise e
+            #raise e
           finally:
             send_[0] = False
 
@@ -85,18 +82,11 @@ class WebSwitches():
 
         try:
           await scrib()
-          for i in range(11):
+          for i in range(511):
             if err[0]:
               break
-            #print(f"api_switch_ls: {i} \n:: {aa_.state}")
-            #await request.write("\r\n")  # check connected if error must return
-            #await request.write("event: " + "msg\r\n")
-            #await request.write("data: " + json.dumps(aa_) + "\r\n")
-            #await request.write(f"id: {time.time()}\r\n")
-            #await request.write("\r\n")
-            #await self.web.sleep(92)
-            await asyncio.sleep(92)
+            await asyncio.sleep(2)
         finally:
-          #print(f"api_switch_ls: close")
           aa_.unsubscribe(scrib)
-        #return vnt_data
+
+
