@@ -15,18 +15,20 @@ class NetworkManager(Service):
         #ntptime.NTP_DELTA = ntptime.NTP_DELTA - self.timezone_offset * 3600  # Корректировка таймзоны
 
     async def connect_to_network(self, *args):
-        if self.sta.isconnected():
-            print('already connected')
-            print(self.sta.ifconfig())
-            return True
-        print('Start connection')
-
-        # Активация интерфейса STA (клиентский режим)
-        self.sta.active(True)
-
         if args:
           d = {"ssid":args[0], "pswd":args[1]}
         else:
+
+          if self.sta.isconnected():
+            print('already connected')
+            print(self.sta.ifconfig())
+            return True
+
+          print('Start connection')
+
+          # Активация интерфейса STA (клиентский режим)
+          self.sta.active(True)
+
           try:
             with open('/wifi.json', 'r') as f:
               d = json.loads(f.read())
@@ -36,9 +38,9 @@ class NetworkManager(Service):
             return False
         #self.ssid = d.get('ssid')
         #self.pswd = d.get('pswd')
-        self.sta.connect(d.get('ssid'), d.get('pswd'))
-        #self.connect(d.get('ssid'), d.get('pswd'), False)
-        #self.connect(d.get('ssid'), d.get('pswd'), False)
+        if d.get('ssid') and d.get('pswd'):
+          self.sta.disconnect()
+          self.sta.connect(d.get('ssid'), d.get('pswd'))
 
         #await asyncio.sleep(3)
         for _ in range(5): 
@@ -90,6 +92,7 @@ class NetworkManager(Service):
           await asyncio.sleep(2)
           self.sta.disconnect()
           print("Net forgot" )
+          await self.connect_to_network()
 
         asyncio.create_task(forgot())
 
