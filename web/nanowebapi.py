@@ -242,6 +242,7 @@ class Nanoweb:
         except OSError as e:
             # Skip ECONNRESET error (client abort request)
             if e.args[0] != uerrno.ECONNRESET:
+                cou_req[0]-=1
                 raise
         finally:
             await writer.aclose()
